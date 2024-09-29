@@ -1,0 +1,6 @@
+section {
+  flex: 1;
+  padding: 20px;
+  border: 1px solid black;
+  background-color: white;
+}
