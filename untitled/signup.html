@@ -6,7 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Moody's Gourmet Cookies</title>
 
-
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 
   <style>
@@ -45,6 +44,11 @@
       background-color: salmon;
       border-color: salmon;
     }
+    .error-message {
+      color: red;
+      font-size: 0.875rem;
+      margin-bottom: 0.5rem;
+    }
   </style>
 </head>
 <body style="margin: 0; padding: 0; height: 100vh; display: flex; flex-direction: column;">
@@ -67,27 +71,27 @@
   </nav>
 
   <section>
-    <article>
-
-    </article>
-
     <div class="container mt-5">
       <h2 class="text-center">User Signup</h2>
-      <form>
+      <form id="signup-form">
         <div class="form-group">
           <label for="username">Username:</label>
+          <div id="username-error" class="error-message"></div>
           <input type="text" class="form-control" id="username" placeholder="Enter username">
         </div>
         <div class="form-group">
           <label for="email">Email:</label>
+          <div id="email-error" class="error-message"></div>
           <input type="email" class="form-control" id="email" placeholder="Enter email">
         </div>
         <div class="form-group">
           <label for="password">Password:</label>
+          <div id="password-error" class="error-message"></div>
           <input type="password" class="form-control" id="password" placeholder="Enter password">
         </div>
         <div class="form-group">
           <label for="confirm-password">Confirm Password:</label>
+          <div id="confirm-password-error" class="error-message"></div>
           <input type="password" class="form-control" id="confirm-password" placeholder="Confirm password">
         </div>
         <button type="submit" class="btn btn-primary btn-block">Signup</button>
@@ -114,10 +118,96 @@
   </ul>
 </footer>
 
+<script>
+  let inputtedFields = {
+    username: false,
+    email: false,
+    password: false,
+    confirmPassword: false,
+  };
+
+  function validateInput() {
+    const username = document.getElementById("username").value;
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    const confirmPassword = document.getElementById("confirm-password").value;
+
+    const usernameError = document.getElementById("username-error");
+    const emailError = document.getElementById("email-error");
+    const passwordError = document.getElementById("password-error");
+    const confirmPasswordError = document.getElementById("confirm-password-error");
+
+    usernameError.textContent = "";
+    emailError.textContent = "";
+    passwordError.textContent = "";
+    confirmPasswordError.textContent = "";
+
+    const usernameField = document.getElementById("username");
+    const emailField = document.getElementById("email");
+    const passwordField = document.getElementById("password");
+    const confirmPasswordField = document.getElementById("confirm-password");
+
+    usernameField.classList.remove('is-invalid');
+    emailField.classList.remove('is-invalid');
+    passwordField.classList.remove('is-invalid');
+    confirmPasswordField.classList.remove('is-invalid');
+
+    let isValid = true;
+
+    if (inputtedFields.username) {
+      if (username.length < 5 || /\d/.test(username)) {
+        usernameError.textContent = "Username must be at least 5 characters long and cannot contain numbers.";
+        usernameField.classList.add('is-invalid');
+        isValid = false;
+      }
+    }
+
+    if (inputtedFields.email) {
+      if (email === "" || !email.includes("@")) {
+        emailError.textContent = "Enter a valid email address.";
+        emailField.classList.add('is-invalid');
+        isValid = false;
+      }
+    }
+
+    if (inputtedFields.password) {
+      if (password === "" || password.length < 8) {
+        passwordError.textContent = "Password must be at least 8 (characters or numbers).";
+        passwordField.classList.add('is-invalid');
+        isValid = false;
+      }
+    }
+
+    if (confirmPassword !== password) {
+      confirmPasswordError.textContent = "Passwords do not match.";
+      confirmPasswordField.classList.add('is-invalid');
+      isValid = false;
+    }
+
+    return isValid;
+  }
+
+  window.onload = function() {
+    document.getElementById('signup-form').addEventListener('submit', function(event) {
+      event.preventDefault();
+      if (validateInput()) {
+        console.log("Form is valid!");
+      }
+    });
+
+    const inputs = document.querySelectorAll('.form-control');
+    inputs.forEach(function(input) {
+      input.addEventListener('input', function() {
+        inputtedFields[input.id] = true;
+        validateInput();
+      });
+    });
+  };
+</script>
+
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 </body>
 </html>
-
