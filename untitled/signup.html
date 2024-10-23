@@ -96,6 +96,7 @@
         </div>
         <button type="submit" class="btn btn-primary btn-block">Signup</button>
       </form>
+      <div id="jsonOutput"></div>
     </div>
   </section>
 
@@ -119,6 +120,15 @@
 </footer>
 
 <script>
+  const jsonUser = [
+    {
+      "username": "lkmdd",
+      "email": "lkmdd@gmail.com",
+      "password": "lkmoody3",
+      "confirmPassword": "lkmoody3"
+    }
+  ];
+
   let inputtedFields = {
     username: false,
     email: false,
@@ -172,7 +182,7 @@
 
     if (inputtedFields.password) {
       if (password === "" || password.length < 8) {
-        passwordError.textContent = "Password must be at least 8 (characters or numbers).";
+        passwordError.textContent = "Password must be at least 8 characters long.";
         passwordField.classList.add('is-invalid');
         isValid = false;
       }
@@ -188,13 +198,6 @@
   }
 
   window.onload = function() {
-    document.getElementById('signup-form').addEventListener('submit', function(event) {
-      event.preventDefault();
-      if (validateInput()) {
-        console.log("Form is valid!");
-      }
-    });
-
     const inputs = document.querySelectorAll('.form-control');
     inputs.forEach(function(input) {
       input.addEventListener('input', function() {
@@ -202,9 +205,28 @@
         validateInput();
       });
     });
-  };
-</script>
 
+    document.getElementById('signup-form').addEventListener('submit', function(event) {
+      event.preventDefault();
+      if (validateInput()) {
+        const newUser = {
+          username: document.getElementById('username').value,
+          email: document.getElementById('email').value,
+          password: document.getElementById('password').value,
+          confirmPassword: document.getElementById('confirm-password').value
+        };
+
+        const jsonOutput = document.getElementById('jsonOutput');
+
+        if (jsonOutput.innerHTML === `<pre style="color: black;">${JSON.stringify(jsonUser, null, 2)}</pre>`) {
+
+        } else {
+          jsonOutput.innerHTML = `<pre style="color: black;">${JSON.stringify(newUser, null, 2)}</pre>`;
+        }
+      }
+    });
+  }
+</script>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
